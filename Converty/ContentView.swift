@@ -9,41 +9,46 @@ import SwiftUI
 
 
 struct ContentView: View {
+    
     @State private var valueForConvert = 20.0
     @State private var valueForConvertUnit = "Celsius"
     @State private var convertedValueUnit = "Fahrenheit"
     
     var convertedValue: Double {
-        let baseTempInCelsius: Double
+        
+        let baseTemp: Measurement<UnitTemperature>
         
         switch(valueForConvertUnit) {
         case "Celsius":
-            baseTempInCelsius = valueForConvert
+            baseTemp = Measurement(value: valueForConvert, unit: UnitTemperature.celsius)
             
         case "Fahrenheit":
-            baseTempInCelsius = (valueForConvert - 32)/1.8
+            baseTemp = Measurement(value: valueForConvert, unit: UnitTemperature.fahrenheit)
             
         case "Kelvin":
-            baseTempInCelsius = valueForConvert - 273.15
+            baseTemp = Measurement(value: valueForConvert, unit: UnitTemperature.kelvin)
             
         default:
-            baseTempInCelsius = 0
+            baseTemp = Measurement(value: valueForConvert, unit: UnitTemperature.celsius)
         }
-        
+            
+            
         let convertedValueFromCelcius: Double
         switch(convertedValueUnit) {
         case "Celsius":
-            convertedValueFromCelcius = baseTempInCelsius
-            
+            convertedValueFromCelcius = baseTemp.converted(to: .celsius).value
+                
         case "Fahrenheit":
-            convertedValueFromCelcius = valueForConvert * 1.8 + 32
-            
+            convertedValueFromCelcius = baseTemp.converted(to: .fahrenheit).value
+                
         case "Kelvin":
-            convertedValueFromCelcius = valueForConvert + 273.15
-            
+            convertedValueFromCelcius = baseTemp.converted(to: .kelvin).value
+                
         default:
             convertedValueFromCelcius = 0
         }
+            
+            
         
         return convertedValueFromCelcius
     }
